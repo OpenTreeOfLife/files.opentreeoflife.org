@@ -5,7 +5,7 @@
 all: ott/ott2.9/index.html
 
 ott/ott2.9/ott2.9.md:
-	wget -O $@ --no-check-certificate  "https://github.com/OpenTreeOfLife/reference-taxonomy/blob/master/doc/ott2.9.md"
+	wget -O $@ --no-check-certificate  "https://raw.githubusercontent.com/OpenTreeOfLife/reference-taxonomy/master/doc/ott2.9.md"
 
 tmp/Markdown.pl:
 	mkdir -p tmp
