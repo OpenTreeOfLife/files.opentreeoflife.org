@@ -1,0 +1,143 @@
+<html>
+<head><meta charset="UTF-8"/></head>
+<body>
+<h1>Open Tree of Life reference taxonomy version 2.8</h1>
+
+<p>Version 2.8 (also known as version 2.8 draft 5) was generated on 11 June 2014.</p>
+
+<h2>Download</h2>
+
+<p><a href="http://purl.org/opentree/ott/ott2.8/ott2.8.tgz">Download</a> (gzipped tar file, 119 Mbyte) </p>
+
+<h2>Contents</h2>
+
+<p>All files are encoded UTF-8.  For detailed documentation about file formats, see <a href="https://github.com/OpenTreeOfLife/reference-taxonomy/wiki/Interim-taxonomy-file-format">documentation in the reference taxonomy
+wiki</a>,
+on github.</p>
+
+<p><strong>conflicts.tsv</strong>: Report on taxa that are hidden because they are paraphyletic with respect to a higher priority taxon.  Number at beginning is height in taxonomic tree of nearest common ancestor with priority taxon that 'steals' one or more children.</p>
+
+<p><strong>deprecated.tsv</strong>: List all of taxa that have been deprecated since previous version. </p>
+
+<p><strong>differences.tsv:</strong> Summary of differences between ott2.8 and ott2.7.</p>
+
+<p><strong>hidden.tsv</strong>: Report on 'hidden' taxa (incertae sedis and other suppressed taxa). Columns are OTT id, name, source taxonomy and id, containing major group, and flags (reasons for hiding).</p>
+
+<p><strong>log.tsv</strong>: Debugging information related to homonym resolution.</p>
+
+<p><strong>taxonomy.tsv</strong>: The file that contains the taxonomy. Columns are separated by vertical bars ('|'). Columns are:</p>
+
+<ul>
+<li>uid - an identifier for the taxon, unique within this file. Should be native accession number whenever possible. Usually this is an integer, but it need not be. </li>
+<li>parent_uid - the identifier of this taxon's parent, or the empty string if there is no parent (i.e., it's a root).</li>
+<li>name - arbitrary text for the taxon name; not necessarily unique within the file.</li>
+<li>rank, e.g. species, family, class. If no rank is assigned, or the rank is unknown, contains "no rank".</li>
+<li>sourceinfo - the source taxonomies providing the taxon.</li>
+<li>uniqname - human friendly name providing homonym disambiguation.</li>
+<li>flags - notable properties of this taxon, if any.</li>
+</ul>
+
+<p><strong>synonyms.tsv</strong>: The list of synonyms. Columns are separated by vertical bars ('|'). Columns are:</p>
+
+<ul>
+<li>uid - the id for the taxon (from taxonomy.tsv) that this synonym resolves to</li>
+<li>name - the synonymic taxon name</li>
+<li>type - typically will be 'synonym' but could be any of the NCBI synonym types (authority, common name, etc.)</li>
+<li>uniqname - name with name of target taxon</li>
+</ul>
+
+<p><strong>version.tsv</strong>: The version of OTT.</p>
+
+<h2>Build script</h2>
+
+<p>The reference taxonomy is an algorithmic combination of several
+source taxonomies.  For code,
+see <a href="https://github.com/OpenTreeOfLife/reference-taxonomy">the
+source code repository</a>.
+Version 2.8 was generated using 
+<a href="https://github.com/OpenTreeOfLife/reference-taxonomy/commit/f2ee381ef3c2d1806cd3d4b311124fb590aa2a42">commit f2ee381ef3c2d1806cd3d4b311124fb590aa2a42</a>.</p>
+
+<p>Where taxonomies conflict regarding taxon relationships, they are
+resolved in favor of the higher priority taxonomy.  The priority
+ordering is as given below.</p>
+
+<h2>Sources</h2>
+
+<p>Any errors in OTT
+should be assumed to have been introduced by the Open Tree of Life 
+project until confirmed as originating in the source taxonomy.</p>
+
+<p>Download locations are for the particular versions used to construct
+OTT 2.8.  For new work, current versions of these sources should be
+retrieved.</p>
+
+<ol>
+<li><p>Taxonomy from: 
+DS Hibbett, M Binder, JF Bischoff, M Blackwell, et al. 
+A higher-level phylogenetic classification of the <i>Fungi</i>.
+<a href="http://dx.doi.org/10.1016/j.mycres.2007.03.004">Mycological Research</i> <b>111</b>(5):509-547, 2007</a>.
+Newick string with revisions
+archived at <a href="http://dx.doi.org/10.6084/m9.figshare.915439">http://dx.doi.org/10.6084/m9.figshare.915439</a>.
+<br />
+Download location: <a href="http://purl.oeg/opentree/ott/ott2.8/inputs/hibbett-20140313.tre">http://purl.org/opentree/ott/ott2.8/inputs/hibbett-20140313.tre</a></p></li>
+<li><p>Taxonomy from: SILVA 16S ribosomal RNA database, version 115.
+See: Quast C, Pruesse E, Yilmaz P, Gerken J, Schweer T, Yarza P, Peplies J,
+Gl&ouml;ckner FO (2013) The SILVA ribosomal RNA gene database project:
+improved data processing and web-based tools. 
+<a href="http://dx.doi.org/10.1093/nar/gks1219">Nucleic Acids Research</i> 41 (D1): D590-D596</a>.
+Web site: <a href="http://www.arb-silva.de/">http://www.arb-silva.de/</a>.
+<br />
+Download location: <a href="ftp://ftp.arb-silva.de/release_115/Exports/tax_ranks_ssu_115.csv">ftp://ftp.arb-silva.de/release_115/Exports/tax_ranks_ssu_115.csv</a>.</p></li>
+<li><p>Index Fungorum.
+Download location: derived from database query result files provided by Paul
+Kirk, April 2014 (personal communication).
+Web site: <a href="http://www.indexfungorum.org/">http://www.indexfungorum.org/</a>.
+<br />
+Download location (converted to OTT format): <a href="http://purl.org/opentree/ott/ott2.8/inputs/if-20140514.tgz">http://purl.org/opentree/ott/ott2.8/inputs/if-20140514.tgz</a>.</p></li>
+<li><p>Taxonomy from:
+Sch&auml;ferhoff, B., Fleischmann, A., Fischer, E., Albach, D. C., Borsch,
+T., Heubl, G., and M&uuml;ller, K. F. (2010). Towards resolving Lamiales
+relationships: insights from rapidly evolving chloroplast
+sequences. 
+<a href="http://dx.doi.org/10.1186/1471-2148-10-352"><i>BMC evolutionary biology</i> 10(1), 352.</a>.
+Manually transcribed from the paper and converted to OTT format.
+<br />
+Download location: <a href="http://purl.oeg/opentree/ott/ott2.8/inputs/lamiales-20140118.tsv">http://purl.org/opentree/ott/ott2.8/inputs/lamiales-20140118.tsv</a></p></li>
+<li><p>NCBI Taxonomy, from the 
+<a href="http://www.ncbi.nlm.nih.gov/">US National Center on Biotechnology Information</a>.
+Web site: <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/">http://www.ncbi.nlm.nih.gov/Taxonomy/</a>.
+Current version download location:
+<a href="ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz">ftp://ftp.ncbi.nlm.nih.gov/pub/taxonomy/taxdump.tar.gz</a>
+<br />
+For OTT 2.8 we used a version dated circa 11 June 2014.
+Download location: <a href="http://purl.org/opentree/ott/ott2.8/inputs/taxdump-20140611.tgz">http://purl.org/opentree/ott/ott2.8/inputs/taxdump-20140611.tgz</a>.
+</li></p></li>
+<li><p>GBIF Backbone Taxonomy, from the 
+<a href="http://www.gbif.org/">Global Biodiversity Information facility</a>.
+Current version download location: 
+<a href="http://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c">http://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c</a>.
+<br />
+We used a version dated 2013-07-02.
+Download location: <a href="http://purl.org/opentree/gbif-backbone-2013-07-02.zip">http://purl.org/opentree/gbif-backbone-2013-07-02.zip</a>.</p></li>
+<li><p><a href="http://www.obis.org.au/irmng/">Interim Register of Marine and Nonmarine Genera (IRMNG)</a>, from CSIRO.
+Current version download location:
+<a href="http://www.cmar.csiro.au/datacentre/downloads/IRMNG_DWC.zip">http://www.cmar.csiro.au/datacentre/downloads/IRMNG_DWC.zip</a>.
+<br />
+We used a version dated 2014-01-31.  Download location:
+<a href="http://purl.org/opentree/ott/ott2.8/inputs/IRMNG_DWC-2014-01-30.zip">http://purl.org/opentree/ott/ott2.8/inputs/IRMNG_DWC-2014-01-30.zip</a>.</p></li>
+</ol>
+
+<p>It has been requested that we relay the following statement:</p>
+
+<blockquote>
+  <p>REUSE OF IRMNG CONTENT:
+IRMNG (the Interim Register of Marine and Nonmarine Genera) is assembled, with permission, from a range of third party data sources, certain of which permit data reuse only under specific conditions. In particular, for data originating from the Catalogue of Life (CoL), please refer to the relevant terms and conditions for reuse of CoL data as available at <a href="http://www.catalogueoflife.org/content/terms-use">http://www.catalogueoflife.org/content/terms-use</a>, and for data originating from the World Register of Marine Species (WoRMS) refer the paragraph "Terms of Use and Citation" at <a href="http://www.marinespecies.org/about.php">http://www.marinespecies.org/about.php</a>. The compilers of IRMNG accept no liability for any reuse of IRMNG content by downstream users which may be construed by the original data providers to violate their publicly available conditions of use.</p>
+</blockquote>
+
+<p>The Open Tree Taxonomy does not reproduce its sources in their
+entirety or in their original form of expression, but only uses
+limited information expressed in them. See "<a href="http://dx.doi.org/10.1186/1756-0500-7-79">Scientific names of
+organisms: attribution, rights, and licensing</a>" (<a href="http://dx.doi.org/10.1186/1756-0500-7-79">http://dx.doi.org/10.1186/1756-0500-7-79</a>)
+regarding use of taxonomic information and attribution.</p>
+</body>
+</html>

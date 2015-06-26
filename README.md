@@ -3,49 +3,34 @@ How to make changes to the files.opentreeoflife.org site
 ====
 
 The site is currently deployed on ot10.opentreeoflife.org (a.k.a
-devapi.opentreeoflife.org), with a web root directory there of
-~opentree/files.opentreeoflife.org/.
+devapi.opentreeoflife.org), with a web root directory of
+~opentree/files.opentreeoflife.org/.  The web root is a git checkout
+of the files.opentreeoflife.org github repository.
 
-There are two kinds of files in this tree on ot10: "large" and "small".  The
-large files (e.g. versions of OTT or the synthetic tree) are simply
-copied from wherever they originate to the appropriate place on ot10.
-The small files - mostly index.html files - are mirrored manually 
-in the opentree repo on github.  These can be
-updated on ot10 in any of three ways:
+There are two kinds of files in this tree on ot10: "large" and "small".
 
-### Push method 1
+1. The small files - mostly index.html files - are maintained in the 
+files.opentreeoflife.org github repository.
+2. The large files (e.g. versions of OTT or the synthetic tree) are simply
+copied from wherever they originate to the appropriate place in this tree.
+They are backed up elsewhere (currently varela.csail.mit.edu).
 
-Clone the opentree repository, or make sure it's up to date ('git pull').
-Update the small files you want to change in your local clone, 
-under deploy/files.opentreeoflifeorg/.  Then
-copy files into place on ot10 using scp or rsync:
+The small files can be updated on ot10 in any of three ways:
 
-    scp -p foo/index.html opentree@ot10.opentreeoflife.org:files.opentreeoflife.org/foo/
+### Push method
 
-Commit your local changes, push to a branch, and submit a pull request.
-
-### Push method 2
-
-May be better for more complicated changes.
-As above, clone or update the opentree repo.
-Update the small files you want to change in your local clone, 
-under deploy/files.opentreeoflifeorg/, and then do
-
-    cd opentree/deploy
-    ./push.sh -c ../../deployed-systems/development/devapi.config files
-
-(Be sure you give the 'files' command.)
-
-This assumes you've checked out the deployed-systems repo in a sibling
-directory of where the opentree repo is checked out.
-
-Commit your local changes, push, and submit a pull request.
+Clone the files.opentreeoflife.org repository locally, or bring it up
+to date if you've already cloned it ('git pull').  Update the small
+files you want to change in your local clone and commit to the master
+branch on github (with a pull request, if you like).  Then refresh the
+web site from github by logging in to ot10 and doing 'git pull' in the
+~opentree/files.opentreeoflife.org directory.
 
 ### Pull method
 
 Edit the files in place on ot10.  Then copy them using scp from ot10
-into your local checkout of the opentree repo.  Commit, push, PR.
-
+back to your local checkout of the files.opentreeoflife.org repo.
+Branch, commit, push, PR.
 
 ### Checking your markdown
 
@@ -54,3 +39,6 @@ Here is how I check my markdown (on OS X)
     perl ~/Downloads/Markdown_1.0.1/Markdown.pl README.md  >foo.html && open foo.html
 
 The download link is [here](http://daringfireball.net/projects/markdown/).
+
+If you want to write web pages in markdown, remember that they have to
+be converted to HTML for them to work on the web.
