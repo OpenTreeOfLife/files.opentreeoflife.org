@@ -25,7 +25,7 @@ Then refresh the web site from github by logging in to ot10 and doing
 
     echo "cd files.opentreeoflife.org && git pull && make" | ssh ot10
 
-The 'make' is only necessary if you change one a markdown file that
+The 'make' is only necessary if you change a markdown file that
 has to be converted to HTML.
 
 Using branches and the PR process seems a bit heavyweight for this
