@@ -17,3 +17,6 @@ tmp/Markdown.pl:
 ott/ott2.9/index.html: ott/ott2.9/ott2.9.md tmp/Markdown.pl
 	perl tmp/Markdown.pl --html4tags $< >$@
 
+clean:
+	rm -r tmp
+	rm ott/ott2.9/ott2.9.md ott/ott2.9/index.html
