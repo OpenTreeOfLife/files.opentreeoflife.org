@@ -1,6 +1,6 @@
 # How to make changes to the files.opentreeoflife.org site
 
-The site is currently deployed on ot10.opentreeoflife.org (a.k.a
+[The site](http://files.opentreeoflife.org/README) is currently deployed on ot10.opentreeoflife.org (a.k.a
 devapi.opentreeoflife.org), with a web root directory of
 ~opentree/files.opentreeoflife.org/.  The web root is a git checkout
 of the [files.opentreeoflife.org github repository](https://github.com/OpenTreeOfLife/files.opentreeoflife.org).
