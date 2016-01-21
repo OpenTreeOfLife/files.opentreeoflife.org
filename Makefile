@@ -15,7 +15,8 @@ tmp/Markdown.pl:
 	rm -r Markdown_1.0.1 Markdown_1.0.1.zip
 
 ott/ott2.9/index.html: ott/ott2.9/ott2.9.md tmp/Markdown.pl
-	perl tmp/Markdown.pl --html4tags $< >$@
+	echo "<!-- AUTOMATICALLY GENERATED - DO NOT EDIT -->" >$@
+	perl tmp/Markdown.pl --html4tags $< >>$@
 
 clean:
 	rm -r tmp
