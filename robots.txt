@@ -4,4 +4,6 @@ Disallow: /other/
 # Block downloadable .tgz archives
 Disallow: /ott/
 Disallow: /trees/
+Disallow: /preprocessed/
+Disallow: /2.8-inputs/
 Crawl-delay: 60
