@@ -1,11 +1,12 @@
 # How to make changes to the files.opentreeoflife.org site
 
-[The site](http://files.opentreeoflife.org/README) is currently deployed on ot10.opentreeoflife.org (a.k.a
-devapi.opentreeoflife.org), with a web root directory of
-~opentree/files.opentreeoflife.org/.  The web root is a git checkout
+(See [the germinator repository's wiki](https://github.com/OpenTreeOfLife/germinator/wiki) for Open Tree of Life documentation.)
+
+[The site](http://files.opentreeoflife.org/README) is served from the directory
+~opentree/files.opentreeoflife.org/ on host files.opentreeoflife.org.  The web root is a git checkout
 of the [files.opentreeoflife.org github repository](https://github.com/OpenTreeOfLife/files.opentreeoflife.org).
 
-There are two kinds of files in this tree on ot10: "large" and "small".
+There are two kinds of files in this tree: "large" and "small".
 
 1. The small files - mostly index.html files - are maintained in the 
 files.opentreeoflife.org github repository.
@@ -13,28 +14,30 @@ files.opentreeoflife.org github repository.
 copied from wherever they originate to the appropriate place in this tree.
 They are backed up elsewhere (currently varela.csail.mit.edu).
 
-The small files can be updated on ot10 in any of three ways:
+It is useful to have a 'files' alias in you .ssh/config.
+
+The small files can be updated in any of three ways:
 
 ### Push method
 
 Clone the files.opentreeoflife.org repository locally, or bring it up
 to date if you've already cloned it ('git pull').  Update the small
 files you want to change in your local clone and commit to github.
-Then refresh the web site from github by logging in to ot10 and doing
+Then refresh the web site from github by logging in and doing
 'git pull' in the ~opentree/files.opentreeoflife.org directory.
 
-    echo "cd files.opentreeoflife.org && git pull && make" | ssh ot10
+    echo "cd files.opentreeoflife.org && git pull && make" | ssh files
 
 The 'make' is only necessary if you change a markdown file that
 has to be converted to HTML.
 
 Using branches and the PR process seems a bit heavyweight for this
-site.  I'm OK with committing to master for now and switching to a
+site.  I'm OK with committing directly to master for now. We can switch to a
 more rigorous process if that leads to trouble.
 
 ### Pull method
 
-Edit the files in place on ot10.  Then copy them using scp from ot10
+Edit the files in place on the server.  Then copy them using scp
 back to your local checkout of the files.opentreeoflife.org repo.
 Branch, commit, push, PR.
 
