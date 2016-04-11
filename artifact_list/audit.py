@@ -139,7 +139,7 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                     if os.path.exists(path):
                         if path == dst:
                             True
-                        if os.path.islink(path) or os.path.isdir(path):
+                        elif os.path.islink(path) or os.path.isdir(path):
                             # Is a symlink or directory - this is the desired state
                             True
                         else:
@@ -174,11 +174,11 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                         tbd = "mv %s %s && ln -sf %s %s" % (path, dst, dst, path)
                 else:
                     if ':' in loc:
-                        print "** no such file", path
+                        print "echo @@ no such file", path
                         loc = ""
                     else:
                         print "echo @@ no such file", path
-                        print "echo ... might be on files.opentreeoflife.org"
+                        print "echo @@  ... might be on files.opentreeoflife.org"
                         loc = files_prefix + loc
             if tbd != None:
                 local_tbd = tbd
@@ -189,15 +189,22 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                     tbd = 'curl -s "%s" >%s.tmp && mv %s.tmp %s' % (loc, dst, dst, dst)
                 elif ':' in loc:
                     # print "if ! ssh %s test -r %s; then echo Not found: %s; fi" % (loc[0:i], loc[i+1:], loc)
-                    tbd = "scp -p %s %s" % (loc, dst)
+                    if prefix != 'files:':
+                        tbd = "scp -p %s %s" % (loc, dst)
+                    else:
+                        p = os.path.join(v["series_name"], os.path.basename(dst))
+                        tbd = 'echo on-question-scp %s files:files.opentreeoflife.org/%s' % (p, p)
+        dir = os.path.dirname(dst)
         if local_tbd != None:
-            print "mkdir -p %s" % os.path.dirname(dst)
+            if not os.path.isdir(dir):
+                print "mkdir -p %s" % dir
             print local_tbd
         elif tbd != None:
-            print "mkdir -p %s" % os.path.dirname(dst)
+            if not os.path.isdir(dir):
+                print "mkdir -p %s" % dir
             print tbd
         else:
-            print "** cannot find", locations
+            print "echo @@ cannot find", ' or '.join(locations)
     doit()
 
 args = p.parse_args()

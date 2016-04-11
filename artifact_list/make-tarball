@@ -36,7 +36,7 @@ ln -sf $src $tmp
 # Follow-symlinks tar flag:
 #   -L on OS X
 #   --dereference on Debian
-if [ -d /System ] and false; then
+if [ -d /System ] && false; then
     flag=-L
 else
     flag=--dereference
