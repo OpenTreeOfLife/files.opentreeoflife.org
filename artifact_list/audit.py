@@ -211,7 +211,7 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                     if prefix != 'files:':
                         tbd = "scp -p %s %s" % (loc, dst)
                     else:
-                        p = os.path.join(v["series_name"], os.path.basename(dst))
+                        p = os.path.join(v["series_name"], v["name"], os.path.basename(dst))
                         tbd = 'echo on-question-scp %s files:files.opentreeoflife.org/%s' % (p, p)
         dir = os.path.dirname(dst)
         if local_tbd != None:
