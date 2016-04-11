@@ -2,3 +2,4 @@ tmp
 *.tgz
 *.zip
 *.gz
+*~
