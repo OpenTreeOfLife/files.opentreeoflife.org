@@ -12,10 +12,14 @@ p.add_argument("files", help="location base for files host, e.g. 'http://files.o
 # os.path.realpath(symlink)
 
 # Value of "legal" field:
-#   pd = public domain because US govt or out of copyright
-#   cc0 = cc0
-#   public = distributed to public on web without license
-#   handoff = received privately without nondisclosure or license
+#   OK to redistribute:
+#     pd = public domain because US govt or out of copyright
+#     cc0 = cc0
+#     public = distributed to public on web without click-through license
+#   anything else = license terms require something, do not redistribute:
+#     handoff = received privately without nondisclosure or license
+#     cc-by-v3.0 = copying requires attribution
+#     $ = access requires payment, etc.
 
 # sources/    - files that open tree has copied from elsewhere
 #   series/
@@ -35,8 +39,11 @@ import json, os
 # load and validate
 
 allowed_keys = ["name", "retrieved_from", "source_suffix", "target_suffix", "legal", "==="]
-series_allowed_keys = allowed_keys + ["versions"]
+series_allowed_keys = allowed_keys + ["versions", "idspace"]
 version_allowed_keys = allowed_keys + ["source", "target"]
+
+# Do validation up front
+# Also, copy some fields (inheritance)
 
 def load(artifact_list_path):
     with open(artifact_list_path) as infile:
@@ -44,16 +51,16 @@ def load(artifact_list_path):
         for s in directory["series"]:
             for key in s:
                 if not key in series_allowed_keys:
-                    print '** invalid series field', key
+                    print 'echo @@ invalid series field', key
             if "name" in s:
                 sname = s["name"]
             else:
-                print '** series has no name', s
+                print 'echo @@ series has no name', s
                 continue
             for v in s["versions"]:
                 for key in v:
                     if not key in version_allowed_keys:
-                        print '** unrecognized key in version', key
+                        print 'echo @@ unrecognized key in version', key
                 # Inheritance!
                 for key in s:
                     if key in allowed_keys and not key in v:
@@ -61,21 +68,39 @@ def load(artifact_list_path):
                 # default version location is files.opentreeoflife.org/series/version/
                 #  which contains artifact files (zips, tarballs)
                 if not 'name' in v:
-                    print '** artifact has no name', v
+                    print 'echo @@ artifact has no name', v
                     continue
                 vname = v["name"]
                 v['series_name'] = sname
-                if v.get("source_suffix") == v.get("target_suffix"):
-                    print '** suffix clash', v.get("source_suffix"), vname
-                if not ("target" in v or "source" in v):
-                    print '** artifact should have either source or target', vname
-                if "source" in v and not "source_suffix" in v:
-                    print '** missing source_suffix', vname
-                if "target" in v and not "target_suffix" in v:
-                    print '** missing target_suffix', vname
-                if "legal" in v:
-                    if not v["legal"] in ["pd", "cc0", "public", "handoff"]:
-                        print '** unrecognized legal', v["legal"], vname
+                def check_artifact(artifact_field, suffix_field, legal):
+                    artifact = v.get(artifact_field)
+                    if artifact == None:
+                        return None
+                    suffix = v.get(suffix_field)
+                    if "locations" in artifact or "bytes" in artifact:
+                        if suffix == None:
+                            print 'echo @@ missing suffix', vname
+                        else:
+                            if legal != None:
+                                artifact['suffix'] = suffix
+                                artifact["legal"] = legal
+                                if legal in ["pd", "cc0", "public"]:
+                                    return suffix
+                                else:
+                                    print 'echo @@ not known to be public', vname, suffix
+                            else:
+                                print 'echo @@ missing legal', vname, suffix
+                    return None
+                s1 = check_artifact("source", "source_suffix", v["legal"])
+                s2 = check_artifact("target", "target_suffix", "cc0")
+                if s1 != None:
+                    if s2 != None:
+                        if s1 == s2:
+                            print 'echo @@ suffix clash', suffix, a_suffix, vname
+                elif s2 == None:
+                    print 'echo @@ no archivable artifacts', vname
+                #if "target" in v and "source" in v:
+                #    v["target"]["derived_from"] = ... ? ...
         return directory
 
 # shuffle bits around to get local artifact store into shape
@@ -89,24 +114,16 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                 vname = v["name"]
                 path = os.path.join(v['series_name'], vname)
                 artifacts = []
-                if "target" in v:
-                    if "target_suffix" in v:
-                        fullname = os.path.join(path, vname + v["target_suffix"])
-                        artifacts.append((fullname, v["target"], v))
-                    else:
-                        print '** has no target_suffix', v["name"]
-                if "source" in v:
-                    fullname = os.path.join(path, vname + v["source_suffix"])
-                    legal = v["legal"]
-                    if legal in ["pd", "cc0", "public"]:
-                        artifacts.append((fullname, v["source"], v))
-                    elif legal in ["handoff"]:
-                        if len(artifacts) > 0:
-                            print 'echo handoff - exporting target only', vname
-                        else:
-                            print 'echo handoff, no target - not exporting', vname
-                    else:
-                        print '** unrecognized legal', legal, vname
+                def add(artifact_field):
+                    artifact = v.get(artifact_field)
+                    if artifact != None:
+                        if "locations" in artifact or "bytes" in artifact:
+                            if artifact["legal"] in ["pd", "cc0", "public"]:
+                                suffix = artifact['suffix']
+                                fullname = os.path.join(path, vname + suffix)
+                                artifacts.append((fullname, artifact, v))
+                add("target")
+                add("source")
                 for a in artifacts:
                     balance(*a)
 
@@ -151,7 +168,7 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
             return
         print 'echo --- %s ---' % vname
         if locations == None:
-            print '** no locations for this artifact', artifact["name"]
+            print 'echo @@ no locations for this artifact', artifact["name"]
             return
         if len(locations) == 0:
             return
@@ -171,6 +188,8 @@ def audit(artifact_list_path, repo, prefix, local, files_prefix):
                         tbd = "./make-tarball %s %s" % (dir, dst)
                     else:
                         # move file and leave symbolic link behind.
+                        if not dst.startswith('/'):
+                            print 'echo @@ relative links probably will not work!', dst
                         tbd = "mv %s %s && ln -sf %s %s" % (path, dst, dst, path)
                 else:
                     if ':' in loc:
